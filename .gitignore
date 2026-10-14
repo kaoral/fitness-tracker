@@ -20,6 +20,7 @@ instance/
 data/
 imports/
 exports/
+data_exploration/
 
 # macOS files
 .DS_Store
