@@ -2,5 +2,39 @@
 
 {% block content %}
     <h1>{{ page_title }}</h1>
-    <p>This is a broad overview of my fitness data.</p>
+
+    {% if database_error %}
+        <p role="alert">The workout database is unavailable. Please check your local Gadgetbridge export.</p>
+    {% elif workouts %}
+        <p>Workouts from your local Gadgetbridge export. Start times are shown in Europe/Berlin.</p>
+        <table>
+            <caption>Workout summaries, newest first</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Workout ID</th>
+                    <th scope="col">Start time</th>
+                    <th scope="col">Distance (km)</th>
+                    <th scope="col">Active duration</th>
+                    <th scope="col">Steps</th>
+                    <th scope="col">Reported calories</th>
+                    <th scope="col">Workout type code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for workout in workouts %}
+                    <tr>
+                        <th scope="row">{{ workout.id }}</th>
+                        <td>{{ workout.start_time }}</td>
+                        <td>{{ workout.distance_km }}</td>
+                        <td>{{ workout.active_duration }}</td>
+                        <td>{{ workout.steps }}</td>
+                        <td>{{ workout.calories }}</td>
+                        <td>{{ workout.type_code }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No workouts available</p>
+    {% endif %}
 {% endblock %}
