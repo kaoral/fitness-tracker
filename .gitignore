@@ -1,0 +1,28 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local configuration
+.env
+.env.*
+
+# Local databases and health data
+instance/
+*.db
+*.sqlite
+*.sqlite3
+data/
+imports/
+exports/
+
+# macOS files
+.DS_Store
+
+# VS Code workspace settings
+.vscode/
