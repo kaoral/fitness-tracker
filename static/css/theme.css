@@ -1,0 +1,14 @@
+/* Edit these shared colour and spacing tokens to customise the entire interface. */
+:root {
+  --bg: #17102e; --ink: #f1eff8; --ink2: #cfcbe4; --dim: #8f89ad;
+  --border: #2b2550; --accent: #6f8cff; --accent2: #a9b8ff;
+  --surface: #1d1637; --surface2: #241c40; --sidebar: #140e28;
+  --accent-soft: rgba(111,140,255,.12); --teal: #57c1b4; --violet: #ac91ee; --amber: #e6b575;
+  --radius: 16px; --gap: 24px; --card-pad: 24px; --table-pad: 17px;
+  --tblr-font-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --tblr-body-bg: var(--bg); --tblr-body-color: var(--ink); --tblr-border-color: var(--border);
+  --tblr-primary: var(--accent); --tblr-card-bg: var(--surface); --tblr-link-color: var(--accent2);
+}
+html[data-accent='lavender'] { --accent:#ac91ee; --accent2:#ccbbfa; --accent-soft:rgba(172,145,238,.12); }
+html[data-accent='teal'] { --accent:#57c1b4; --accent2:#8cddd3; --accent-soft:rgba(87,193,180,.12); }
+html[data-compact='true'] { --gap:16px; --card-pad:18px; --table-pad:11px; --radius:12px; }

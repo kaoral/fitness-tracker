@@ -1,19 +1,8 @@
+{% from '_components.html' import icon with context %}
 <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page_title }} | Fitness Tracker</title>
-</head>
+<html lang="en" data-bs-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>{{ page_title }} · Pulse</title><link rel="stylesheet" href="{{ url_for('static', filename='vendor/tabler.min.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"><script src="{{ url_for('static', filename='js/appearance.js') }}"></script><script defer src="{{ url_for('static', filename='vendor/tabler.min.js') }}"></script><script defer src="{{ url_for('static', filename='vendor/plotly.min.js') }}"></script><script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script></head>
 <body>
-    <nav>
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('data_overview') }}">Data Overview</a>
-        <a href="{{ url_for('daily') }}">Daily</a>
-    </nav>
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-</body>
-</html>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div class="app-shell"><aside class="sidebar" id="sidebar" aria-label="Main navigation"><a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">{{ icon('activity',26) }}</span><span>Pulse<small>Personal fitness</small></span></a><div class="nav-label">YOUR OVERVIEW</div><nav class="app-nav">{% for endpoint,label,symbol in [('home','Dashboard','home'),('daily','Daily activity','calendar'),('data_overview','Workouts','activity'),('sleep','Sleep','moon'),('stress','Stress','heart')] %}<a href="{{ url_for(endpoint) }}" class="nav-item {% if active_page == endpoint or (active_page == 'workout_detail' and endpoint == 'data_overview') %}active{% endif %}" {% if active_page == endpoint %}aria-current="page"{% endif %}>{{ icon(symbol) }}<span>{{ label }}</span></a>{% endfor %}</nav><div class="nav-label nav-label-second">YOUR WORKSPACE</div><nav class="app-nav">{% for endpoint,label,symbol in [('sources','Data sources','database'),('settings','Appearance','settings')] %}<a href="{{ url_for(endpoint) }}" class="nav-item {% if active_page == endpoint %}active{% endif %}" {% if active_page == endpoint %}aria-current="page"{% endif %}>{{ icon(symbol) }}<span>{{ label }}</span></a>{% endfor %}</nav><div class="sidebar-footer"><span class="privacy-dot"></span><div>Local &amp; personal<small>Your data, on your device</small></div></div></aside><div class="sidebar-scrim" data-sidebar-close></div><div class="main-shell"><header class="topbar"><div class="topbar-start"><button class="icon-button mobile-menu" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">{{ icon('menu') }}</button><span class="topbar-breadcrumb">Personal workspace<span>/</span><strong>{{ page_title }}</strong></span></div><span class="local-badge"><span class="status-dot"></span>Local database</span></header><main id="main-content" class="page-content">{% if database_error %}<div class="notice notice-error" role="alert"><strong>Your database is unavailable.</strong><span>Check that your Gadgetbridge export is saved as <code>instance/Gadgetbridge.db</code>, then reload this page.</span></div>{% endif %}{% if warnings %}<details class="notice notice-warning"><summary>Some data needs a little context <span>{{ warnings|length }} note{{ 's' if warnings|length != 1 else '' }}</span></summary><ul>{% for warning in warnings %}<li>{{ warning }}</li>{% endfor %}</ul></details>{% endif %}{% block content %}{% endblock %}</main><footer class="page-footer"><span>Pulse · A clearer picture of your health</span><span>Europe/Berlin · Recorded measurements, not medical advice</span></footer></div></div><div class="toast-message" role="status" aria-live="polite" data-toast hidden></div>
+</body></html>

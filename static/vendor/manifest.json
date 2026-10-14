@@ -1,0 +1,22 @@
+{
+  "tabler.min.css": {
+    "url": "https://cdn.jsdelivr.net/npm/@tabler/core@1.6.1/dist/css/tabler.min.css",
+    "sha256": "370a2d4e608ae518351d10528fc7dbe19b354ae5062c51b2a9cb294850d65403"
+  },
+  "tabler.min.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@tabler/core@1.6.1/dist/js/tabler.min.js",
+    "sha256": "9d26ca1aa061a0c647305654e32efc2c8838e348b2423e9d1f4593869868e09b"
+  },
+  "TABLER-LICENSE": {
+    "url": "https://raw.githubusercontent.com/tabler/tabler/dev/LICENSE",
+    "sha256": "4f88a82d13be3c5c63a12c5631eae914aa4381b6dc17641bf1ab85f3f8f6c8a5"
+  },
+  "plotly.min.js": {
+    "url": "https://cdn.jsdelivr.net/npm/plotly.js-basic-dist-min@4.1.2/plotly-basic.min.js",
+    "sha256": "fa18ed1c94c06576c0a867bb2477534716c39e5b22affe673f2a184317974926"
+  },
+  "PLOTLY-LICENSE": {
+    "url": "https://raw.githubusercontent.com/plotly/plotly.js/v4.1.2/LICENSE",
+    "sha256": "8c45d9eaf50c2f72dd9c7ab9ef440788ba58a3538484b5c51c1f17d5128752e7"
+  }
+}

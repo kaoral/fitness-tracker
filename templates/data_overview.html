@@ -1,40 +1,9 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
+{% from '_components.html' import page_header, stats_grid, charts_grid, date_filters, workout_table with context %}
 {% block content %}
-    <h1>{{ page_title }}</h1>
-
-    {% if database_error %}
-        <p role="alert">The workout database is unavailable. Please check your local Gadgetbridge export.</p>
-    {% elif workouts %}
-        <p>Workouts from your local Gadgetbridge export. Start times are shown in Europe/Berlin.</p>
-        <table>
-            <caption>Workout summaries, newest first</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Workout ID</th>
-                    <th scope="col">Start time</th>
-                    <th scope="col">Distance (km)</th>
-                    <th scope="col">Active duration</th>
-                    <th scope="col">Steps</th>
-                    <th scope="col">Reported calories</th>
-                    <th scope="col">Workout type code</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for workout in workouts %}
-                    <tr>
-                        <th scope="row">{{ workout.id }}</th>
-                        <td>{{ workout.start_time }}</td>
-                        <td>{{ workout.distance_km }}</td>
-                        <td>{{ workout.active_duration }}</td>
-                        <td>{{ workout.steps }}</td>
-                        <td>{{ workout.calories }}</td>
-                        <td>{{ workout.type_code }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No workouts available</p>
-    {% endif %}
+{{ page_header('TRAINING LOG', 'Your workouts.', 'Explore your sessions, compare distances, and look closer at each workout.') }}
+{{ date_filters(filters,'workouts',types) }}
+{{ stats_grid(stats) }}
+{{ charts_grid(charts) }}
+<section class="panel"><div class="card-heading"><div><h2>Workout history</h2><p>{{ workouts|length }} session{{ 's' if workouts|length != 1 else '' }} in this view · local start times</p></div><span class="subtle-badge">Gadgetbridge</span></div>{% if not database_error %}{{ workout_table(workouts) }}{% endif %}</section>
 {% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% from '_components.html' import page_header, stats_grid, charts_grid, date_filters, unavailable with context %}
+{% block content %}
+{{ page_header('REST & RECOVERY', 'Make room for rest.', 'Explore the timing and duration of the sleep sessions in your export.') }}
+{{ date_filters(filters,'sleep') }}{{ stats_grid(stats) }}{{ charts_grid(charts) }}
+<section class="panel"><div class="card-heading"><div><h2>Sleep sessions</h2><p>Grouped by wake-up date · Europe/Berlin</p></div><span class="subtle-badge">{{ sleeps|length }} sessions</span></div>{% if sleeps %}<div class="table-responsive"><table class="data-table"><thead><tr><th scope="col">Wake-up day</th><th scope="col">Session start</th><th scope="col">Session end</th><th scope="col" class="numeric">Duration</th></tr></thead><tbody>{% for session in sleeps %}<tr><td><a class="text-link" href="{{ url_for('daily',date=session.date) }}">{{ session.date }}</a></td><td>{{ datetime_label(session.start_iso) }}</td><td>{{ datetime_label(session.end_iso) }}</td><td class="numeric">{{ number(session.duration_hours,2) }} <span class="table-unit">h</span></td></tr>{% endfor %}</tbody></table></div>{% elif not database_error %}{{ unavailable('No sleep sessions are available for the selected dates.') }}{% endif %}<div class="panel-note">Session durations describe recorded sleep intervals. Sleep stage interpretation is limited to the information available in the source.</div></section>
+{% endblock %}

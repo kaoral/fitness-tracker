@@ -1,0 +1,43 @@
+{% macro icon(name, size=20) -%}
+<svg width="{{ size }}" height="{{ size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{% if name == 'home' %}<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>
+{% elif name == 'activity' %}<path d="M3 12h4l3-8 4 16 3-8h4"/>
+{% elif name == 'calendar' %}<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h2m4 0h2"/>
+{% elif name == 'moon' %}<path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z"/>
+{% elif name == 'heart' %}<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>
+{% elif name == 'database' %}<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>
+{% elif name == 'settings' %}<path d="m9 3-.5 3-2 1.2L4 6.5l-2 3 2 2v2l-2 2 2 3 2.5-.7L8.5 19l.5 3h6l.5-3 2-1.2 2.5.7 2-3-2-2v-2l2-2-2-3-2.5.7L15.5 6 15 3Z"/><circle cx="12" cy="12.5" r="3"/>
+{% elif name == 'arrow' %}<path d="M5 12h14m-5-5 5 5-5 5"/>
+{% elif name == 'download' %}<path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/>
+{% elif name == 'chevron' %}<path d="m9 5 7 7-7 7"/>
+{% elif name == 'menu' %}<path d="M4 6h16M4 12h16M4 18h16"/>
+{% elif name == 'check' %}<path d="m5 12 4 4L19 6"/>
+{% elif name == 'eye' %}<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"/><circle cx="12" cy="12" r="3"/>
+{% endif %}
+</svg>
+{%- endmacro %}
+
+{% macro page_header(eyebrow, title, description) %}
+<div class="page-heading"><div><div class="eyebrow">{{ eyebrow }}</div><h1>{{ title }}</h1><p>{{ description }}</p></div><div class="heading-actions">{{ caller() if caller is defined else '' }}</div></div>
+{% endmacro %}
+
+{% macro stats_grid(stats) %}
+{% if stats %}<div class="stats-grid stats-count-{{ stats|length }}">{% for stat in stats %}<article class="stat-card"><div class="stat-label">{{ stat.label }}</div><div class="stat-value {% if stat.value|string|length > 11 %}stat-value-duration{% endif %}">{{ stat.value }}{% if stat.unit %}<span>{{ stat.unit }}</span>{% endif %}</div>{% if stat.detail %}<div class="stat-detail">{{ stat.detail }}</div>{% endif %}</article>{% endfor %}</div>{% endif %}
+{% endmacro %}
+
+{% macro charts_grid(charts) %}
+{% if charts %}
+<div class="chart-toolbar"><span class="section-kicker">A closer look</span><details class="view-controls"><summary>{{ icon('eye', 16) }} Customize charts</summary><div class="view-controls-panel"><p>Choose the charts shown on this page.</p><div data-chart-toggles></div><button class="text-button" type="button" data-restore-charts>Show all charts</button></div></details></div>
+<div class="charts-grid">{% for chart in charts %}<article class="chart-card" data-chart-card="{{ chart.id }}" data-chart-title="{{ chart.title }}"><div class="card-heading"><div><h2 id="{{ chart.id }}-title">{{ chart.title }}</h2><p>{{ chart.description }}</p></div><button type="button" class="icon-button hide-chart" data-hide-chart="{{ chart.id }}" title="Hide {{ chart.title }}" aria-label="Hide {{ chart.title }}">{{ icon('eye', 17) }}</button></div>{% if chart.figure and chart.figure.data %}<div class="plot-chart" id="{{ chart.id }}" role="img" aria-labelledby="{{ chart.id }}-title"></div><script type="application/json" class="chart-config" data-chart-target="{{ chart.id }}">{{ chart.figure|tojson }}</script>{% else %}<div class="chart-empty"><span class="empty-symbol">{{ icon('activity', 25) }}</span><p>{{ chart.empty_message or 'No measurements available for this view.' }}</p></div>{% endif %}</article>{% endfor %}</div>
+{% endif %}
+{% endmacro %}
+
+{% macro date_filters(filters, kind, types=none) %}
+<form class="filter-bar" method="get"><div class="filter-field"><label for="start">From</label><input class="form-control" type="date" id="start" name="start" value="{{ filters.start or '' }}"></div><div class="filter-field"><label for="end">To</label><input class="form-control" type="date" id="end" name="end" value="{{ filters.end or '' }}"></div>{% if types is not none %}<div class="filter-field"><label for="type">Workout type</label><select class="form-select" name="type" id="type"><option value="">All workouts</option>{% for item in types %}<option value="{{ item.code }}" {% if filters.type|string == item.code|string %}selected{% endif %}>{{ item.label }} · {{ item.code }}</option>{% endfor %}</select></div><div class="filter-field"><label for="sort">Sort by</label><select class="form-select" id="sort" name="sort">{% for value,label in [('newest','Newest first'),('oldest','Oldest first'),('distance','Longest distance'),('duration','Longest duration')] %}<option value="{{ value }}" {% if filters.sort == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>{% endif %}<div class="filter-actions"><button class="btn btn-primary" type="submit">Apply filters</button><a class="btn btn-quiet" href="{{ url_for(request.endpoint) }}">Reset</a></div><a class="btn btn-quiet export-button" href="{{ url_for('export_data', kind=kind, start=filters.start or '', end=filters.end or '', type=filters.type or '', sort=filters.sort or '') }}">{{ icon('download',16) }} Export CSV</a></form>
+{% endmacro %}
+
+{% macro workout_table(workouts, concise=false) %}
+{% if workouts %}<div class="table-responsive"><table class="data-table"><thead><tr><th scope="col">Workout</th><th scope="col">Started · Berlin</th><th scope="col" class="numeric">Distance</th><th scope="col" class="numeric">Active time</th>{% if not concise %}<th scope="col" class="numeric">Steps</th><th scope="col" class="numeric">Reported kcal</th><th scope="col" class="numeric">Avg. heart rate</th>{% endif %}<th scope="col"><span class="visually-hidden">View workout</span></th></tr></thead><tbody>{% for workout in workouts %}<tr><td><a class="workout-link" href="{{ url_for('workout_detail', workout_id=workout.id) }}"><span class="workout-icon">{{ icon('activity',18) }}</span><span>{{ workout.type_label }}<small>#{{ workout.id }} · type {{ workout.type_code }}</small></span></a></td><td>{{ workout.start_label }}</td><td class="numeric">{{ number(workout.distance_km,2) }}<span class="table-unit"> km</span></td><td class="numeric">{{ workout.duration_label }}</td>{% if not concise %}<td class="numeric">{{ number(workout.steps) }}</td><td class="numeric">{{ number(workout.calories) }}</td><td class="numeric">{{ number(workout.avg_hr) }}<span class="table-unit"> bpm</span></td>{% endif %}<td><a class="row-link" href="{{ url_for('workout_detail', workout_id=workout.id) }}" aria-label="View workout {{ workout.id }}">{{ icon('chevron',16) }}</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">{{ icon('activity',32) }}<h3>No workouts available</h3><p>Your workouts will appear here when they are available in your export.</p></div>{% endif %}
+{% endmacro %}
+
+{% macro unavailable(message='There is no data for this view yet.') %}<div class="empty-state">{{ icon('database',30) }}<h3>No measurements available</h3><p>{{ message }}</p></div>{% endmacro %}

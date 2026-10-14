@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% from '_components.html' import page_header, stats_grid, charts_grid, date_filters, unavailable with context %}
+{% block content %}
+{{ page_header('CHECK IN WITH YOURSELF', 'Your recorded stress.', 'Look at how the device’s stress measurements change across your days.') }}
+{{ date_filters(filters,'stress') }}{{ stats_grid(stats) }}{{ charts_grid(charts) }}
+<section class="panel"><div class="card-heading"><div><h2>Stress readings</h2><p>Device-reported values · local timestamps</p></div><span class="subtle-badge">{{ readings|length }} readings shown</span></div>{% if readings %}<div class="table-responsive readings-table"><table class="data-table"><thead><tr><th scope="col">Day</th><th scope="col">Recorded at · Berlin</th><th scope="col" class="numeric">Stress value</th></tr></thead><tbody>{% for reading in readings %}<tr><td><a class="text-link" href="{{ url_for('daily',date=reading.date) }}">{{ reading.date }}</a></td><td>{{ datetime_label(reading.timestamp_iso) }}</td><td class="numeric"><span class="stress-reading">{{ number(reading.value) }}</span></td></tr>{% endfor %}</tbody></table></div>{% elif not database_error %}{{ unavailable('No stress readings are available for the selected dates.') }}{% endif %}<div class="panel-note">These values come from your wearable. A device’s stress estimate is a personal trend indicator, not a diagnosis.</div></section>
+{% endblock %}

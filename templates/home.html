@@ -1,6 +1,9 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
+{% from '_components.html' import page_header, stats_grid, charts_grid, workout_table, icon with context %}
 {% block content %}
-    <h1>{{ page_title }}</h1>
-    <p>This is the homepage of my fitness tracker.</p>
+{% call page_header('YOUR HEALTH, IN PERSPECTIVE', 'Every day adds up.', 'See the patterns in your movement, recovery, and recorded wellbeing.') %}<a class="btn btn-quiet" href="{{ url_for('sources') }}">{{ icon('database',16) }} About your data</a>{% endcall %}
+{{ stats_grid(stats) }}
+{{ charts_grid(charts) }}
+<section class="panel latest-panel"><div class="card-heading"><div><div class="section-kicker">KEEP MOVING</div><h2>Your latest workouts</h2><p>A snapshot of the sessions in your export.</p></div><a class="text-link" href="{{ url_for('data_overview') }}">View all {{ icon('arrow',16) }}</a></div>{{ workout_table(latest_workouts, concise=true) }}</section>
+{% if coverage %}<section class="coverage-strip"><div><span class="section-kicker">THE BIGGER PICTURE</span><h2>Know what is recorded.</h2><p>Your dashboard reflects the data available in your export.</p></div><div class="coverage-pills">{% for item in coverage %}<a href="{{ url_for('sources') }}" class="coverage-pill"><span class="coverage-dot {% if not item.count %}muted{% endif %}"></span>{{ item.label }}<strong>{{ number(item.count) }}</strong></a>{% endfor %}</div></section>{% endif %}
 {% endblock %}

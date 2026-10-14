@@ -1,0 +1,2 @@
+{% extends 'base.html' %}
+{% block content %}<div class="error-page"><div class="eyebrow">{{ status }} · LET’S GET YOU BACK</div><h1>{{ page_title }}</h1><p>{{ message }}</p><div class="error-actions"><a class="btn btn-primary" href="{{ url_for('home') }}">Go to dashboard</a><a class="btn btn-quiet" href="{{ url_for('settings') }}">Appearance</a></div></div>{% endblock %}
